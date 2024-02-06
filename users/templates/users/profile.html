@@ -1,0 +1,62 @@
+{% extends 'users/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+<!-- Content wrapper -->
+<div class="content-wrapper">
+    <!-- Content -->
+
+    <div class="container-xxl flex-grow-1 container-p-y">
+      <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Account Settings /</span> Account</h4>
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card mb-4">
+            <h5 class="card-header">Profile Details</h5>
+            <!-- Account -->
+            <div class="card-body">
+              <div class="d-flex align-items-start align-items-sm-center gap-4">
+                <img
+                  src="{{ user.user_profile.image.url }}"
+                  alt=""
+                  class="d-block rounded"
+                  height="100"
+                  width="100"
+                  id="uploadedAvatar"
+                />
+                <div class="button-wrapper">
+                  <h4>user name: {{ user.username }}</h4>
+                  <h4>Email: {{ user.email }}</h4>
+                </div>
+              </div>
+            </div>
+            <hr class="my-0" />
+            <div class="card-body">
+              <form id="formAccountSettings" class="row g-3 needs-validation" action="" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row">
+                  <div class="mb-3 col-md-6">
+                        {{ u_form | crispy }}
+                        {{ p_form | crispy }}
+                        {{ form | crispy }} 
+                  </div>
+                </div>
+                <div class="mt-2">
+                  <button type="submit" class="btn btn-primary me-2">Save changes</button>
+                  <button class="btn btn-outline-secondary"> <a href="#">Cancel</a> </button>
+                </div>
+              </form>
+            </div>
+            <!-- /Account -->
+          </div>
+          <!--delete account-->
+        </div>
+      </div>
+    </div>
+    <!-- / Content -->
+    <div class="content-backdrop fade"></div>
+  </div>
+  <!-- Content wrapper -->
+
+{% endblock %}

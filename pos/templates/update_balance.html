@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}
+<title>Update Customer Balance</title>
+{% endblock %}
+
+{% block content %}
+<h3 class="text-center">Update Customer Balance</h3>
+<div class="row">
+  <div class="container">
+    <div class="card">
+      <div class="card-body">
+        <form action="#" method="post"> {% csrf_token %}
+          <div class="form-group">
+            <label for="identity">Customer Identity:</label>
+            <input type="text" class="form-control" id="identity" name="identity" placeholder="Enter Customer Identity" required>
+          </div>
+          <div class="form-group">
+            <label for="amount">Amount:</label>
+            <input type="number" step="0.01" class="form-control" id="amount" name="amount" placeholder="Enter Amount" required>
+          </div>
+          <button type="submit" class="btn btn-success">Update Balance &raquo;</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

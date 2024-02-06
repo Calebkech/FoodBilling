@@ -1,0 +1,39 @@
+
+**TITLE: FOOD BILLING SYSTEM**
+**DEVELOPER: **
+**CONTACT: **
+**EMAIL: **
+
+**TO RUN SYSTEM TYPE THE FOLLOWING COMMANDS**
+
+**Instructions**
+- Install the Requirements: pip install -r requirements.txt
+- Then, make database migrations: python manage.py makemigrations
+- python manage.py migrate
+- And finally, run the application: python manage.py runserver
+- For Admin Panel, please create one with superuser!
+            
+---------------------------------------------
+---------------------------------------------
+
+TRADE PROJECT 
+OL’LESSOS TECHNICAL TRAINING INSTITUTE 
+FOOD BILLING SYSTEM
+
+
+NAME		: 	
+INDEX NO	: 	
+COURSE CODE	: 	
+PAPER CODE	: 	
+INSTITUTION	: 	OL’LESSOS TECHNICAL TRAINING INSTITUTE 
+SUPERVISOR	: 	MR. LULE
+DEPARTMENT	: 	INFORMATION COMMUNICATION TECHNOLOGY
+COURSE		: 	DIPLOMA IN INFORMATION COMMUNICATION
+				TECHNOLOGY
+SERIES 		: 	NOVEMBER 2021
+
+PRESENTED TO THE KENYA NATIONAL EXAMINATION COUNCIL 
+FOR PARTIAL FULFILLMENT FOR THE AWARD OF 
+DIPLOMA IN INFORMATION COMMUNICATION TECHNOLOGY
+
+
