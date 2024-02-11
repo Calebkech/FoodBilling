@@ -94,7 +94,7 @@ class CustomerListView(ListView):
 class BalanceUpdateView(UpdateView):
     model = Customer
     form_class = BalanceUpdateForm
-    template_name = 'update_balance.html'
+    template_name = 'customer_info.html'
     success_url = reverse_lazy('customer_list')
 
     def get_form_kwargs(self):
@@ -170,3 +170,18 @@ class CustomerDetailsView(UpdateView):
             cid = request.POST.get('customerID', None)
             customer = Customer.objects.get(pk=cid)
             return render(request, 'billing_details.html', {'customer': customer})
+
+def customer_info(request):
+    if request.method == 'GET':
+        return render(request, 'billing.html')
+    else:
+        cid = request.POST.get('customerID', None)
+        customer = Customer.objects.get(pk=cid)
+        products = list(Product.objects.all())
+
+        #the code below ni very long but inawork the same way as the one above, 
+        # context = { 'cust' : customer.identity,
+        #             'name' : customer.name,
+        #             'balance' : customer.balance,
+        #             'products': products, }
+        return render(request, 'customer_info.html', {'customer': customer, 'products': products})
