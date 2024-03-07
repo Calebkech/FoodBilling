@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "pos/base.html" %}
 {% include "users/base.html" %}
 
 {% block title %}
@@ -52,7 +52,6 @@
           <p class="card-text">Clicking the buttons below to Add and View Customers</p>
           <a href="{% url 'new_customer' %}" class="btn btn-primary">New Customer</a>
           <a href="{% url 'customer_list' %}" class="btn btn-primary">View Customers</a>
-          <a href="{% url 'customer_info' %}" class="btn btn-primary">Customer Info</a>
         </div>
       </div>
     </div>

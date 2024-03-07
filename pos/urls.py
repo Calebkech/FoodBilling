@@ -1,6 +1,6 @@
 from django.urls import path
-from pos.views import (order, billing, dashboard, ProductCreateView, ProductListView, CustomerCreateView, 
-                            CustomerListView, BalanceUpdateView, UpdateBalanceView,  UpdateBalanceSuccessView, CustomerDetailsView, customer_info)
+from pos.views import (order, billing, dashboard, ProductCreateView, CutomerDetailsView ,ProductListView, CustomerCreateView, 
+                            CustomerListView, customer_info, CustomerUpdateView)
 
 
 urlpatterns = [
@@ -11,8 +11,6 @@ urlpatterns = [
     path('product_list/', ProductListView.as_view(), name = "product_list"),
     path('new_customer/', CustomerCreateView.as_view(), name="new_customer"),
     path('customer_list/', CustomerListView.as_view(), name = "customer_list"),
-    path('update-balance/', UpdateBalanceView.as_view(), name='update_balance'),
-    path('customer_details/', CustomerDetailsView.as_view(), name = 'customer_details'),
-    path('update-balance/success/<int:identity>/', UpdateBalanceSuccessView.as_view(), name='update_balance_success'),
-    path('customer_info/', customer_info, name = "customer_info")
+    path('customer/<int:pk>/details/', CutomerDetailsView.as_view(), name = 'customer_details'),
+    path('customer/<int:pk>/update/', CustomerUpdateView.as_view(), name='customer_update'),
 ]

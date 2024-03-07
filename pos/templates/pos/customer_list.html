@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "pos/base.html" %}
 
 {% block title %}
 <title>Customer List</title>
@@ -21,7 +21,7 @@
         {% for customer in customers %}
           <tr>
             <td>{{ customer.identity }}</td>
-            <td>{{ customer.name }}</td>
+            <td><a href="{% url 'customer_details' customer.identity %}"> {{ customer.name }} </a></td>
             <td>{{ customer.balance }}</td>
             <td><img src="{{ customer.photo.url }}" alt="{{ customer.name }}" width="50"></td>
           </tr>
