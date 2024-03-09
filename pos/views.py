@@ -1,16 +1,13 @@
-from django.forms.models import BaseModelForm
-from django.http import HttpResponse
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render
 import json
-from django.views import View
 from django.contrib.auth.decorators import login_required
 from .models import Product, Customer, Order, OrderItem
 from django.contrib import messages
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
 from django.urls import reverse_lazy
-from pos.forms import BalanceUpdateForm, FetchCustomerForm
-from django.shortcuts import render, redirect
-from decimal import Decimal
+from django.shortcuts import render
+from django.http import HttpResponseRedirect
+
 
 @login_required
 def dashboard(request):
@@ -77,14 +74,13 @@ class ProductListView(ListView):
 
 class CustomerCreateView(CreateView):
     model = Customer
-    fields = ['identity', 'name', 'balance', 'photo']
-    template_name = 'new_customer.html'
-    reverse_lazy = 'pos/customer_list'
+    fields = ['name', 'balance', 'photo']
+    template_name = 'pos/new_customer.html'
+    success_url = reverse_lazy('customer_list')  # Adjust the URL name if needed
 
     def form_valid(self, form):
         form.instance.user = self.request.user
-        response = super().form_valid(form)
-        return response
+        return super().form_valid(form)
     
 class CustomerListView(ListView):
     model = Customer
@@ -152,3 +148,27 @@ class CustomerUpdateView(UpdateView):
         if self.request.user == trans.user:
             return True
         return False
+    
+from django.contrib import messages
+from django.urls import reverse_lazy
+from django.views.generic import DeleteView
+from .models import Customer
+
+class CustomerDeleteView(DeleteView):
+    model = Customer
+    template_name = 'pos/customer_delete.html'
+    success_url = reverse_lazy('customer_list')
+
+    def test_func(self):
+        customer = self.get_object()
+        return self.request.user == customer.user
+
+    def form_valid(self, form):
+        messages.success(self.request, "Customer successfully deleted")
+        return super().form_valid(form)
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        success_url = self.get_success_url()
+        self.object.delete()
+        return HttpResponseRedirect(success_url)

@@ -1,6 +1,6 @@
 from django.urls import path
 from pos.views import (order, billing, dashboard, ProductCreateView, CutomerDetailsView ,ProductListView, CustomerCreateView, 
-                            CustomerListView, customer_info, CustomerUpdateView)
+                            CustomerListView, CustomerUpdateView, CustomerDeleteView)
 
 
 urlpatterns = [
@@ -13,4 +13,5 @@ urlpatterns = [
     path('customer_list/', CustomerListView.as_view(), name = "customer_list"),
     path('customer/<int:pk>/details/', CutomerDetailsView.as_view(), name = 'customer_details'),
     path('customer/<int:pk>/update/', CustomerUpdateView.as_view(), name='customer_update'),
+    path('customer/<int:pk>/delete/', CustomerDeleteView.as_view(), name = 'customer_delete'),
 ]
