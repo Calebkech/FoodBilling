@@ -1,3 +1,5 @@
+from django.db.models.query import QuerySet
+from django.forms import BaseModelForm
 from django.shortcuts import render
 import json
 from django.contrib.auth.decorators import login_required
@@ -6,7 +8,7 @@ from django.contrib import messages
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
 from django.urls import reverse_lazy
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 
 
 @login_required
@@ -58,10 +60,11 @@ class ProductCreateView(CreateView):
     def form_valid(self, form):
         # Set the current user as the creator of the product
         form.instance.user = self.request.user
-
+        product_name = form.instance.name
+        success_message = f'{product_name} save successfully'
+        messages.success(self.request, success_message)
         # Call the parent class's form_valid method to save the form and get the response
         response = super().form_valid(form)
-
         # Return the response
         return response
     
@@ -80,6 +83,9 @@ class CustomerCreateView(CreateView):
 
     def form_valid(self, form):
         form.instance.user = self.request.user
+        customer_name = form.instance.name
+        success_message = f'{customer_name} save successfully'
+        messages.success(self.request, success_message)
         return super().form_valid(form)
     
 class CustomerListView(ListView):
@@ -110,8 +116,6 @@ class CutomerDetailsView(DetailView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        
-        
         return queryset
     
     def test_func(self):
@@ -149,11 +153,6 @@ class CustomerUpdateView(UpdateView):
             return True
         return False
     
-from django.contrib import messages
-from django.urls import reverse_lazy
-from django.views.generic import DeleteView
-from .models import Customer
-
 class CustomerDeleteView(DeleteView):
     model = Customer
     template_name = 'pos/customer_delete.html'
@@ -165,10 +164,67 @@ class CustomerDeleteView(DeleteView):
 
     def form_valid(self, form):
         messages.success(self.request, "Customer successfully deleted")
-        return super().form_valid(form)
-
-    def delete(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        success_url = self.get_success_url()
         self.object.delete()
-        return HttpResponseRedirect(success_url)
+        return HttpResponseRedirect(self.get_success_url())
+
+# Product Views 
+
+#Product detail view
+class ProductDetailView(DeleteView):
+    model = Product
+    template_name = 'pos/product_details.html'
+    
+    def get_queryset(self):
+        querySet = super().get_queryset()
+        return querySet
+    
+    def test_func(self):
+        product = self.get_object()
+        if self.request.user == product.user:
+            return True
+        return False
+
+#Product Update View
+class ProductUpdateView(UpdateView):
+    model = Product
+    fields = ['name', 'price']
+    template_name = 'pos/product_update.html'
+    success_url = reverse_lazy('product_list')
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        product_name = form.instance.name
+        product_price = form.instance.price
+
+        try:
+            response = super().form_valid(form)
+            success_message = f'updated successfully. Name: {product_name}, Price: {product_price} '
+            messages.success(self.request, success_message)
+        except Exception as e:
+            error_message = f'Failed to update "{product_name} {str(e)}"'
+            messages.error(self.request, error_message)
+            response = super().form_invalid(form)
+        return response
+    
+    def test_func(self):
+        prod = self.get_object()
+        print(prod)
+        if self.request.user == prod.user:
+            return True
+        return False
+
+#Product Delete View
+class ProductDeleteView(DeleteView):
+    model = Product
+    template_name = 'pos/product_delete.html'
+    success_url = reverse_lazy('product_list')
+
+    def test_func(self):
+        product = self.get_object()
+        return self.request.user == product.user
+    
+    def form_valid(self, form):
+        success_message = f'Deleted Successfully'
+        messages.success(self.request, success_message)
+        self.object.delete()
+        return HttpResponseRedirect(self.get_success_url())

@@ -1,0 +1,63 @@
+{% extends "pos/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+<title> {{ product.name }} Product Info </title>
+{% endblock %}
+
+{% load static %}
+
+{% block content %}
+<div class="content"> <!-- Centering the container -->
+  <div class="col-lg-12">
+    <div class="col-sm-6">
+      <div class="card">
+        <div class="card-body">        
+          <h5>Name: {{ product.name }}</h5>
+          <hr>
+          <h5 class="card-text">Price: {{ product.price }}</p>
+          <a href="{% url 'product_update' product.pk %}" class="btn btn-info">Update</a>
+          <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
+          <a href="{% url 'product_list' %}" class="btn btn-primary">Back</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="confirmDeleteModalLabel">Confirm Deletion</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="card-body">
+        <!-- Delete confirmation form -->
+        <form class="row g-3 needs-validation" action="{% url 'product_delete' product.pk %}" method="POST">
+            {% csrf_token %}
+            <div class="col-md-12 text-center">
+                <h4 class="card-title">Are you sure you want to delete <b>{{ product.name }}</b>?</h4>
+                <button class="btn btn-outline-danger" type="submit">Yes, Delete</button>
+                <a class="btn btn-outline-info" href="{% url 'product_details' product.pk %}">Cancel</a>
+            </div>
+        </form>
+    </div>
+    </div>
+  </div>
+</div>
+
+{% block extra_js %}
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  var confirmDeleteBtn = document.getElementById("confirmDeleteBtn");
+  confirmDeleteBtn.addEventListener("click", function() {
+    var confirmDeleteModal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
+    confirmDeleteModal.show();
+  });
+});
+</script>
+{% endblock %}
+
+{% endblock %}
