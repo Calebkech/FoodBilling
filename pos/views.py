@@ -1,5 +1,3 @@
-from django.db.models.query import QuerySet
-from django.forms import BaseModelForm
 from django.shortcuts import render
 import json
 from django.contrib.auth.decorators import login_required
@@ -8,7 +6,8 @@ from django.contrib import messages
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
 from django.urls import reverse_lazy
 from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
+from django.core.paginator import Paginator
 
 
 @login_required
@@ -72,7 +71,27 @@ class ProductCreateView(CreateView):
 class ProductListView(ListView):
     model = Product
     template_name = 'pos/product_list.html'
-    context_object_name = 'products'
+    context_object_name = 'page_obj'
+    ordering = ['-id']
+    paginate_by = 5
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.order_by(*self.ordering)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        queryset = self.get_queryset()
+        paginator = Paginator(queryset, self.paginate_by)
+        page_number = self.request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        context['page_obj'] = page_obj
+
+        return context
+    
+    def test_func(self):
+
+        return True
 
 
 class CustomerCreateView(CreateView):
@@ -91,7 +110,27 @@ class CustomerCreateView(CreateView):
 class CustomerListView(ListView):
     model = Customer
     template_name = 'pos/customer_list.html'
-    context_object_name = 'customers'
+    context_object_name = 'page_obj'
+    ordering = ['-identity']
+    paginate_by = 5
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.order_by(*self.ordering)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        queryset = self.get_queryset()
+        paginator = Paginator(queryset, self.paginate_by)
+        page_number = self.request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        context['page_obj'] = page_obj
+
+        return context
+    
+    def test_func(self):
+
+        return True
         
 
 def customer_info(request):
