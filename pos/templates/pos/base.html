@@ -69,12 +69,10 @@
           </li>          
           <li class="dropdown"><a href="#"><span>Profile</span> <i class="bi bi-chevron-down dropdown-indicator"></i></a>
             <ul>
-              <li><a href="#">Update1</a></li>
-              <li><a href="#">Logout</a></li>
+              <li><a href="{% url 'profile' %}">View Profile</a></li>
+              <li><a href="{% url 'logout' %}">Logout</a></li>
             </ul>
           </li>
-          <li><a href="{% url 'billing' %}"></a></li>
-          <li><a href="{% url 'billing' %}"></a></li>
         </ul>
       </nav><!-- .navbar -->
       <a class="btn-book-a-table" href="#book-a-table"></a>

@@ -1,5 +1,6 @@
 from django.shortcuts import render
 import json
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from .models import Product, Customer, Order, OrderItem
 from django.contrib import messages
@@ -50,7 +51,7 @@ def order(request):
         order.save()
         return render(request, 'pos/order.html', {'success' : order.success})
 
-class ProductCreateView(CreateView):
+class ProductCreateView(LoginRequiredMixin, CreateView):
     model = Product
     fields = ['name', 'price']
     template_name = 'pos/new_product.html'
@@ -68,7 +69,7 @@ class ProductCreateView(CreateView):
         return response
     
 
-class ProductListView(ListView):
+class ProductListView(LoginRequiredMixin, ListView):
     model = Product
     template_name = 'pos/product_list.html'
     context_object_name = 'page_obj'
@@ -94,7 +95,7 @@ class ProductListView(ListView):
         return True
 
 
-class CustomerCreateView(CreateView):
+class CustomerCreateView(LoginRequiredMixin, CreateView):
     model = Customer
     fields = ['name', 'balance', 'photo']
     template_name = 'pos/new_customer.html'
@@ -107,7 +108,7 @@ class CustomerCreateView(CreateView):
         messages.success(self.request, success_message)
         return super().form_valid(form)
     
-class CustomerListView(ListView):
+class CustomerListView(LoginRequiredMixin, ListView):
     model = Customer
     template_name = 'pos/customer_list.html'
     context_object_name = 'page_obj'
@@ -149,7 +150,7 @@ def customer_info(request):
         return render(request, 'pos/customer_info.html', {'customer': customer, 'products': products})
 
 #display details of one item
-class CutomerDetailsView(DetailView):
+class CutomerDetailsView(LoginRequiredMixin, DetailView):
     model = Customer
     template_name = 'pos/customer_info_details.html'
 
@@ -163,7 +164,7 @@ class CutomerDetailsView(DetailView):
             return True
         return False
     
-class CustomerUpdateView(UpdateView):
+class CustomerUpdateView(LoginRequiredMixin, UpdateView):
     model = Customer
     fields = ['name', 'balance', 'photo']
     template_name = 'pos/update_customer.html'
@@ -178,6 +179,7 @@ class CustomerUpdateView(UpdateView):
             response = super().form_valid(form)
             success_message = f'Customer "{customer_name}" successfully updated'
             messages.success(self.request, success_message)
+            print(success_message)
         except Exception as e:
             error_message = f'Failed to update customer "{customer_name} {str(e)}"'
             messages.error(self.request, error_message)
@@ -192,7 +194,7 @@ class CustomerUpdateView(UpdateView):
             return True
         return False
     
-class CustomerDeleteView(DeleteView):
+class CustomerDeleteView(LoginRequiredMixin, DeleteView):
     model = Customer
     template_name = 'pos/customer_delete.html'
     success_url = reverse_lazy('customer_list')
@@ -209,7 +211,7 @@ class CustomerDeleteView(DeleteView):
 # Product Views 
 
 #Product detail view
-class ProductDetailView(DeleteView):
+class ProductDetailView(LoginRequiredMixin, DeleteView):
     model = Product
     template_name = 'pos/product_details.html'
     
@@ -224,7 +226,7 @@ class ProductDetailView(DeleteView):
         return False
 
 #Product Update View
-class ProductUpdateView(UpdateView):
+class ProductUpdateView(LoginRequiredMixin, UpdateView):
     model = Product
     fields = ['name', 'price']
     template_name = 'pos/product_update.html'
@@ -253,7 +255,7 @@ class ProductUpdateView(UpdateView):
         return False
 
 #Product Delete View
-class ProductDeleteView(DeleteView):
+class ProductDeleteView(LoginRequiredMixin, DeleteView):
     model = Product
     template_name = 'pos/product_delete.html'
     success_url = reverse_lazy('product_list')
