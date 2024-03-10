@@ -1,0 +1,56 @@
+{% extends "pos/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+<title>Product List</title>
+{% endblock %}
+
+{% block content %}
+<h3 class="text-center">Product List</h3>
+<div class="row">
+  <div class="container">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Price</th>
+        </tr>
+      </thead>
+      <tbody class="table-border-bottom-0">
+        {% for product in page_obj %}
+          <tr>
+            <td><a href="{% url 'product_details' product.pk %}"> {{ product.name }} </a></td>
+            <td>{{ product.price }}</td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="2"> No Product found. <a href="{% url 'new_product' %}">Add new Product</a></td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <div class="" >
+      {% if is_paginated %}
+        {% if page_obj.has_previous %}
+          <a class="btn btn-outline-primary mb-4 btn-sm" href="?page=1">First</a>
+          <a class="btn btn-outline-primary mb-4 btn-sm" href="?page={{ page_obj.previous_page_number }}">First</a>
+        {% endif %}
+        
+        {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+                <a class="btn btn-info mb-4 btn-sm" href="?page={{ num }}">{{ num }}</a>
+            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                <a class="btn btn-outline-primary mb-4 btn-sm" href="?page={{ num }}">{{ num }}</a>
+            {% endif %}
+        {% endfor %}
+    
+            {% if page_obj.has_next %}
+            <a class="btn btn-outline-primary mb-4 btn-sm" href="?page={{ page_obj.next_page_number }}">Next</a>
+                <a class="btn btn-outline-primary mb-4 btn-sm" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+            {% endif %}
+    
+        {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

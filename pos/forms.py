@@ -5,7 +5,7 @@ from .models import Customer
 class BalanceUpdateForm(forms.ModelForm):
     class Meta:
         model = Customer
-        fields = ['balance']
+        fields = ['balance', 'name']
 
     def __init__(self, *args, **kwargs):
         current_balance = kwargs.pop('current_balance', None)
